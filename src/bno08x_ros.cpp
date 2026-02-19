@@ -168,6 +168,9 @@ void BNO08xROS::init_parameters() {
     this->get_parameter("imu.orientation_yaw_variance", orientation_yaw_variance_);
     this->declare_parameter<bool>("verbose", false);
     this->get_parameter("verbose", verbose_);
+
+    this->declare_parameter<bool>("scale_covariance_by_calib", false);
+    this->get_parameter("scale_covariance_by_calib", scale_covariance_by_calib_);
 }
 
 /**
@@ -284,6 +287,11 @@ std::string BNO08xROS::accuracy_status_string()
  * @return float Scaling factor to apply to base covariances
  */
 float BNO08xROS::get_covariance_scaled(float base_variance, acc_stat_t accuracy) {
+
+    if (!scale_covariance_by_calib_) {
+        return base_variance;  // No scaling, return base variance
+    }
+
     switch(accuracy) {
     case 3:
         return base_variance;            // High accuracy - base covariance (no scaling)

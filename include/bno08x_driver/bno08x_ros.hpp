@@ -78,6 +78,7 @@ private:
     int imu_rate_;
     double orientation_yaw_variance_;
     bool verbose_;
+    bool scale_covariance_by_calib_;
 
     bool publish_orientation_;
     bool publish_acceleration_;
